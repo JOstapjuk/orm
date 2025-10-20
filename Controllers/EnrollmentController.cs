@@ -49,13 +49,16 @@ namespace orm.Controllers
 
         // POST: api/enrollment
         [HttpPost]
+        [HttpPost]
         public ActionResult<Enrollment> Create([FromBody] Enrollment enrollment)
         {
             if (enrollment.Student == null || enrollment.Course == null || enrollment.Teacher == null)
                 return BadRequest("Student, Course, and Teacher objects are required.");
 
             var student = _context.Students.Find(enrollment.Student.Id);
-            var course = _context.Courses.Find(enrollment.Course.Id);
+            var course = _context.Courses
+                .Include(c => c.Classroom)
+                .FirstOrDefault(c => c.Id == enrollment.Course.Id);
             var teacher = _context.Teachers.Find(enrollment.Teacher.Id);
 
             if (student == null) return BadRequest("Student not found");
@@ -69,7 +72,15 @@ namespace orm.Controllers
             _context.Enrollments.Add(enrollment);
             _context.SaveChanges();
 
-            return CreatedAtAction(nameof(Get), new { id = enrollment.Id }, enrollment);
+            //!!!!
+            var result = _context.Enrollments
+                .Include(e => e.Student)
+                .Include(e => e.Course)
+                    .ThenInclude(c => c.Classroom)
+                .Include(e => e.Teacher)
+                .FirstOrDefault(e => e.Id == enrollment.Id);
+
+            return CreatedAtAction(nameof(Get), new { id = enrollment.Id }, result);
         }
 
         // DELETE: api/enrollment/{id}

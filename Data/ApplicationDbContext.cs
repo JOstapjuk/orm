@@ -27,28 +27,5 @@ namespace orm.Data
             : base(options)
         {
         }
-
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            base.OnModelCreating(modelBuilder);
-
-            modelBuilder.Entity<Enrollment>()
-                .HasOne(e => e.Student)
-                .WithMany()
-                .HasForeignKey(e => e.StudentId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Enrollment>()
-                .HasOne(e => e.Course)
-                .WithMany()
-                .HasForeignKey(e => e.CourseId)
-                .OnDelete(DeleteBehavior.Cascade);
-
-            modelBuilder.Entity<Enrollment>()
-                .HasOne(e => e.Teacher)
-                .WithMany()
-                .HasForeignKey(e => e.TeacherId)
-                .OnDelete(DeleteBehavior.SetNull);
-        }
     }
 }

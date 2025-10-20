@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using orm.Data;
 
@@ -11,9 +12,11 @@ using orm.Data;
 namespace orm.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251020180316_UpdateEnrollmentRelationships4")]
+    partial class UpdateEnrollmentRelationships4
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -239,8 +242,6 @@ namespace orm.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ClassroomId");
 
                     b.ToTable("Courses");
                 });
@@ -482,17 +483,6 @@ namespace orm.Migrations
                         .IsRequired();
 
                     b.Navigation("Person");
-                });
-
-            modelBuilder.Entity("orm.Models.Course", b =>
-                {
-                    b.HasOne("orm.Models.Classroom", "Classroom")
-                        .WithMany()
-                        .HasForeignKey("ClassroomId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Classroom");
                 });
 
             modelBuilder.Entity("orm.Models.Document", b =>

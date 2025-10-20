@@ -36,10 +36,19 @@ namespace orm.Controllers
         }
 
         [HttpPost]
-        public ActionResult<Course> Create(Course course)
+        public ActionResult<Course> Create([FromBody] Course course)
         {
+            if (course.Classroom == null)
+                return BadRequest("Classroom object is required.");
+
+            var classroom = _context.Classrooms.Find(course.Classroom.Id);
+            if (classroom == null) return BadRequest("Classroom not found");
+
+            course.Classroom = classroom;
+
             _context.Courses.Add(course);
             _context.SaveChanges();
+
             return CreatedAtAction(nameof(Get), new { id = course.Id }, course);
         }
 
