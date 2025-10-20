@@ -6,13 +6,9 @@ namespace orm.Data
     public class ApplicationDbContext : DbContext
     {
         public DbSet<Article> Articles { get; set; }
-
         public DbSet<Comment> Comments { get; set; }
-
         public DbSet<Author> Authors { get; set; }
-
         public DbSet<ContactData> ContactDatas { get; set; }
-
         public DbSet<Person> Persons { get; set; }
         public DbSet<Category> Categorys { get; set; }
         public DbSet<Product> Products { get; set; }
@@ -27,8 +23,32 @@ namespace orm.Data
         public DbSet<Classroom> Classrooms { get; set; }
         public DbSet<Enrollment> Enrollments { get; set; }
 
-        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options)
+        public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
+            : base(options)
         {
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Student)
+                .WithMany()
+                .HasForeignKey(e => e.StudentId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Course)
+                .WithMany()
+                .HasForeignKey(e => e.CourseId)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Enrollment>()
+                .HasOne(e => e.Teacher)
+                .WithMany()
+                .HasForeignKey(e => e.TeacherId)
+                .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }
