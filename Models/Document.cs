@@ -9,7 +9,7 @@
         public string Country { get; set; }
         public DateTime IssueDate { get; set; }
         public DateTime ExpiryDate { get; set; }
+
         public int PersonId { get; set; }
-        public Person Person { get; set; }
     }
 }

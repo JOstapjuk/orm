@@ -94,23 +94,6 @@ namespace orm.Controllers
             return Ok(_context.Articles);
         }
 
-        [HttpPost("comment")]
-        public ActionResult<List<Comment>> PostComment([FromBody] Comment comment)
-        {
-            comment.Date = DateTime.Now;
-            _context.Comments.Add(comment);
-            _context.SaveChanges();
-
-            var article = _context.Articles.Include(a => a.Comments).SingleOrDefault(a => a.Id == comment.ArticleId);
-
-            if (article == null)
-            {
-                return NotFound();
-            }
-
-            return Ok(article.Comments);
-        }
-
         [HttpGet("article/{articleId}")]
         public ActionResult<List<Comment>> GetCommentsForArticle(int articleId)
         {
@@ -127,7 +110,7 @@ namespace orm.Controllers
         [HttpPost("author")]
         public List<Author> PostAuthor([FromBody] Author author)
         {
-            _context.ContactDatas.Add(author.Contact);
+            _context.ContactInfos.Add(author.Contact);
             _context.SaveChanges();
 
             author.ContactDataId = author.Contact.Id;
@@ -169,7 +152,7 @@ namespace orm.Controllers
 
             if (author.Contact != null)
             {
-                _context.ContactDatas.Remove(author.Contact);
+                _context.ContactInfos.Remove(author.Contact);
             }
 
             _context.Authors.Remove(author);
@@ -191,7 +174,7 @@ namespace orm.Controllers
             author.LastName = updatedAuthor.LastName;
             author.PersonalCode = updatedAuthor.PersonalCode;
 
-            var contactData = _context.ContactDatas.Find(author.ContactDataId);
+            var contactData = _context.ContactInfos.Find(author.ContactDataId);
             if (contactData != null)
             {
                 contactData.Address = updatedAuthor.Contact.Address;

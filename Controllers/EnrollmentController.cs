@@ -18,6 +18,9 @@ namespace orm.Controllers
             _context = context;
         }
 
+
+        // https://entityframework.net/include-multiple-levels
+
         // GET: api/enrollment
         [HttpGet]
         public ActionResult<List<Enrollment>> GetAll()
@@ -53,7 +56,7 @@ namespace orm.Controllers
         public ActionResult<Enrollment> Create([FromBody] Enrollment enrollment)
         {
             if (enrollment.Student == null || enrollment.Course == null || enrollment.Teacher == null)
-                return BadRequest("Student, Course, and Teacher objects are required.");
+                return BadRequest("objects are required.");
 
             var student = _context.Students.Find(enrollment.Student.Id);
             var course = _context.Courses

@@ -7,6 +7,6 @@
         public string LastName { get; set; }
         public string PersonalCode { get; set; }
         public int ContactDataId { get; set; }
-        public ContactData Contact { get; set; }
+        public ContactInfo Contact { get; set; }
     }
 }

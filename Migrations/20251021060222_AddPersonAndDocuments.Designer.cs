@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using orm.Data;
 
@@ -11,9 +12,11 @@ using orm.Data;
 namespace orm.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20251021060222_AddPersonAndDocuments")]
+    partial class AddPersonAndDocuments
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -457,11 +460,13 @@ namespace orm.Migrations
 
             modelBuilder.Entity("orm.Models.ContactInfo", b =>
                 {
-                    b.HasOne("orm.Models.Person", null)
+                    b.HasOne("orm.Models.Person", "Person")
                         .WithOne("ContactInfo")
                         .HasForeignKey("orm.Models.ContactInfo", "PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("orm.Models.Course", b =>
@@ -477,11 +482,13 @@ namespace orm.Migrations
 
             modelBuilder.Entity("orm.Models.Document", b =>
                 {
-                    b.HasOne("orm.Models.Person", null)
+                    b.HasOne("orm.Models.Person", "Person")
                         .WithMany("Documents")
                         .HasForeignKey("PersonId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Person");
                 });
 
             modelBuilder.Entity("orm.Models.Enrollment", b =>
